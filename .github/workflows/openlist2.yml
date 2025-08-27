@@ -32,10 +32,15 @@ jobs:
 
       - name: Download latest openlist2 files
         run: |
-          curl -LO $(curl -s https://api.github.com/repos/sbwml/luci-app-openlist2/releases/latest | grep -oP '"browser_download_url":\s*".*openwrt-24.10-aarch64_cortex-a53.tar.gz"' | cut -d '"' -f 4)
-          curl -LO $(curl -s https://api.github.com/repos/sbwml/luci-app-openlist2/releases/latest | grep -oP '"browser_download_url":\s*".*openwrt-24.10-x86_64.tar.gz"' | cut -d '"' -f 4)
-          tar --one-top-level=openwrt-24.10-aarch64_cortex-a53 -xvzf openwrt-24.10-aarch64_cortex-a53.tar.gz
-          tar --one-top-level=openwrt-24.10-x86_64 -xvzf openwrt-24.10-x86_64.tar.gz
+          # 下载最新 release 的两个架构包
+          curl -LO $(curl -s https://api.github.com/repos/sbwml/luci-app-openlist2/releases/latest | grep -oP '"browser_download_url":\s*".*aarch64_cortex-a53\.tar\.gz"' | cut -d '"' -f 4)
+          curl -LO $(curl -s https://api.github.com/repos/sbwml/luci-app-openlist2/releases/latest | grep -oP '"browser_download_url":\s*".*x86_64\.tar\.gz"' | cut -d '"' -f 4)
+          # 解压并分别重命名 packages_ci 目录
+          tar -xvzf *aarch64_cortex-a53.tar.gz
+          mv packages_ci openlist2_aarch64_cortex-a53
+          tar -xvzf *x86_64.tar.gz
+          mv packages_ci openlist2_x86_64
+
       - name: Organize files for aarch64_cortex-a53&x86_64
         run: |
           mkdir openlist2_x86_64 openlist2_aarch64_cortex-a53
