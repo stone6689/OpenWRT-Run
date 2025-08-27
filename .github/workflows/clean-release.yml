@@ -2,8 +2,7 @@ name: Cleanup Old Releases
 
 on:
   schedule:
-    # 每周一 01:00 UTC（北京时间周一 09:00）
-    - cron: "0 1 * * 1"
+    - cron: "20 22 * * *"  # 北京时间早上 6 点 20
 
   workflow_dispatch:
     inputs:
