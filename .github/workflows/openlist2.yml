@@ -43,9 +43,6 @@ jobs:
 
       - name: Organize files for aarch64_cortex-a53&x86_64
         run: |
-          mkdir openlist2_x86_64 openlist2_aarch64_cortex-a53
-          cp openwrt-24.10-x86_64/*.ipk openlist2_x86_64/
-          cp openwrt-24.10-aarch64_cortex-a53/*.ipk openlist2_aarch64_cortex-a53/
           # 保存当前路径并进入目标目录
           pushd "openlist2_x86_64" >/dev/null || exit 1
           for file in *~*.ipk; do
