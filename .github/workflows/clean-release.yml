@@ -2,7 +2,8 @@ name: Cleanup Old Releases
 
 on:
   schedule:
-    - cron: "59 15 * * *"  # 北京时间23:59
+    #- cron: "59 15 * * *"  # 北京时间23:59
+    - cron: "27 2 * * *"  # 北京时间10:27 test
 
   workflow_dispatch:
     inputs:
@@ -26,6 +27,7 @@ jobs:
           set -euo pipefail
           export LANG=C.UTF-8
           export LC_ALL=C.UTF-8
+          KEEP_DAYS="${KEEP_DAYS:-3}"   # ✅ 增加默认值
 
           THRESHOLD="$(date -u -d "${KEEP_DAYS} days ago" '+%Y-%m-%dT%H:%M:%SZ')"
           echo "Threshold time (UTC): $THRESHOLD"
@@ -41,6 +43,7 @@ jobs:
 
           COUNT="$(printf '%s\n' "$TO_DELETE" | sed '/^$/d' | wc -l)"
           echo "Releases to delete: $COUNT"
+          echo "$TO_DELETE" | head -10   # ✅ 只打印前10条预览，防止误删
 
           # 逐行读入：ID \t NAME \t TAG_NAME
           printf '%s\n' "$TO_DELETE" | while IFS=$'\t' read -r ID NAME TAG_NAME; do
