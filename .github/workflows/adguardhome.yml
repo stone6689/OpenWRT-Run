@@ -75,7 +75,7 @@ jobs:
 
           # 下载固定的 luci-app-adguardhome-all.ipk 到该目录 这版本luci界面最好用 而且每次变化的仅仅是内核
             curl -L -o "$ARCH/luci-app-adguardhome-all.ipk" \
-              "https://github.com/rufengsuixing/luci-app-adguardhome/releases/download/1.8-11/luci-app-adguardhome_1.8-11_all.ipk"
+              "https://github.com/wukongdaily/RunFilesBuilder/releases/download/AdGuardHome_v0.107.55/luci-app-adguardhome-all.ipk"
 
             echo "==> Downloaded for $ARCH:"
             ls -lh "$ARCH/luci-app-adguardhome-all.ipk"
