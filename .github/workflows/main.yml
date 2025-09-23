@@ -41,6 +41,7 @@ jobs:
       
       - name: Organize files for x86_64
         run: |
+          wget https://github.com/wkccd/build/releases/download/pw1/passwall_packages_ipk_x86_64.zip
           mkdir -p passwall_x86_64/depends passwall_x86_64/main
           unzip downloads/passwall_packages_ipk_x86_64.zip -d passwall_x86_64/depends
           rm downloads/passwall_packages_ipk_x86_64.zip
@@ -48,6 +49,7 @@ jobs:
 
       - name: Organize files for aarch64_cortex-a53
         run: |
+          wget https://github.com/wkccd/build/releases/download/pw1/passwall_packages_ipk_aarch64_cortex-a53.zip
           mkdir -p passwall_aarch64/depends passwall_aarch64/main
           unzip downloads/passwall_packages_ipk_aarch64_cortex-a53.zip -d passwall_aarch64/depends
           rm downloads/passwall_packages_ipk_aarch64_cortex-a53.zip
