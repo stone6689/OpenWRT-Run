@@ -36,10 +36,16 @@ jobs:
           cd downloads
 
           # 下载 x86_64 ipk
-          curl -L -O https://github.com/wkccd/build/releases/download/pw2/passwall_packages_ipk_x86_64.zip
+          curl -L -O $(
+            curl -s https://api.github.com/repos/xiaorouji/openwrt-passwall2/releases/latest \
+            | jq -r '.assets[] | select(.name | test("passwall_packages_ipk_x86_64\\.zip")) | .browser_download_url'
+          )
 
           # 下载 aarch64 ipk
-          curl -L -O https://github.com/wkccd/build/releases/download/pw2/passwall_packages_ipk_aarch64_cortex-a53.zip
+          curl -L -O $(
+            curl -s https://api.github.com/repos/xiaorouji/openwrt-passwall2/releases/latest \
+            | jq -r '.assets[] | select(.name | test("passwall_packages_ipk_aarch64_cortex-a53\\.zip")) | .browser_download_url'
+          )
 
 
           # 下载第一个 luci-24.10 ipk
