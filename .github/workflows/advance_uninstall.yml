@@ -46,7 +46,7 @@ jobs:
         with:
           tag_name: ${{ env.tag_name }}
           name: "Daily Build - ${{ env.tag_name }}"
-          files: output/*.run
+          files: .run
           token: ${{ secrets.GITHUB_TOKEN }}
           body: |
              <p align="left">
