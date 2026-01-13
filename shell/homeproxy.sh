@@ -1,10 +1,16 @@
 #!/bin/bash
 
 # 平台基础URL
+#declare -A PLATFORMS=(
+  #["x86_64"]="https://downloads.immortalwrt.org/releases/24.10.2/packages/x86_64"
+  #["aarch64_generic"]="https://downloads.immortalwrt.org/releases/24.10.2/packages/aarch64_generic"
+  #["aarch64_cortex-a53"]="https://downloads.immortalwrt.org/releases/24.10.2/packages/aarch64_cortex-a53"
+#)
+
 declare -A PLATFORMS=(
-  ["x86_64"]="https://downloads.immortalwrt.org/releases/24.10.2/packages/x86_64"
-  ["aarch64_generic"]="https://downloads.immortalwrt.org/releases/24.10.2/packages/aarch64_generic"
-  ["aarch64_cortex-a53"]="https://downloads.immortalwrt.org/releases/24.10.2/packages/aarch64_cortex-a53"
+  ["x86_64"]="https://mirrors.pku.edu.cn/immortalwrt/releases/24.10.4/packages/x86_64"
+  ["aarch64_generic"]="https://mirrors.pku.edu.cn/immortalwrt/releases/24.10.4/packages/aarch64_generic"
+  ["aarch64_cortex-a53"]="https://mirrors.pku.edu.cn/immortalwrt/releases/24.10.4/packages/aarch64_cortex-a53"
 )
 
 # 各类包对应的目录
