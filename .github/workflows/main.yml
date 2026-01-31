@@ -56,14 +56,14 @@ jobs:
           mkdir -p passwall_x86_64/depends passwall_x86_64/main
           unzip downloads/passwall_packages_ipk_x86_64.zip -d passwall_x86_64/depends
           rm downloads/passwall_packages_ipk_x86_64.zip
-          cp downloads/luci-*.ipk passwall_x86_64/main/
+          cp downloads/23*.ipk passwall_x86_64/main/
 
       - name: Organize files for aarch64_cortex-a53
         run: |
           mkdir -p passwall_aarch64/depends passwall_aarch64/main
           unzip downloads/passwall_packages_ipk_aarch64_cortex-a53.zip -d passwall_aarch64/depends
           rm downloads/passwall_packages_ipk_aarch64_cortex-a53.zip
-          cp downloads/luci-*.ipk passwall_aarch64/main/
+          cp downloads/23*.ipk passwall_aarch64/main/
 
       - name: Create install.sh scripts
         run: |
