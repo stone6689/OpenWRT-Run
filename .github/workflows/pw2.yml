@@ -49,10 +49,10 @@ jobs:
             curl -s https://api.github.com/repos/Openwrt-Passwall/openwrt-passwall2/releases/latest \
             | jq -r '.assets[] | select(.name | test("luci-.*-passwall2.*\\.ipk")) | .browser_download_url' | head -1
           )
-          # 下载luci语言包ipk
+          # 下载luci简体中文语言包ipk
           curl -L -O $(
             curl -s https://api.github.com/repos/Openwrt-Passwall/openwrt-passwall2/releases/latest \
-            | jq -r '.assets[] | select(.name | test("luci-.*-passwall2.*\\.ipk")) | .browser_download_url' | tail -1
+            | jq -r '.assets[] | select(.name | test("luci-.*-passwall2-zh-cn*\\.ipk")) | .browser_download_url' | tail -1
           )
 
 
