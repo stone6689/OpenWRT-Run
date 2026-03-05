@@ -195,6 +195,7 @@ jobs:
               tmp=${tmp%_all.ipk}       
               version=${tmp/-/_}
               echo "$version"
+              echo "ssrp_version=$version" >> $GITHUB_ENV
               break
           done
           echo "版本号是：${ssrp_version}"
