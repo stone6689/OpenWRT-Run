@@ -189,10 +189,14 @@ jobs:
         id: setver
         run: |
           file=$(ls a53/luci-app-ssr-plus*.ipk 2>/dev/null | head -n1)
-          version=${file##*_}         
-          version=${version%_all.ipk}  
-          version=${version/-/_} 
-          echo "ssrp_version=$version" >> $GITHUB_ENV
+          for file in a53/luci-app-ssr-plus*.ipk; do
+              base=${file##*/}         
+              tmp=${base#*_}           
+              tmp=${tmp%_all.ipk}       
+              version=${tmp/-/_}
+              echo "$version"
+              break
+          done
           echo "版本号是：${ssrp_version}"
 
       - name: Create install.sh 
