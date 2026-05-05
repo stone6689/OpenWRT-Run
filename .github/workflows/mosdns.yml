@@ -39,8 +39,8 @@ jobs:
       - name: Organize files for aarch64_cortex-a53&x86_64
         run: |
           mkdir mosdns_x86_64 mosdns_aarch64_cortex-a53
-          cp x86_64-openwrt-24.10/*.ipk mosdns_x86_64/
-          cp aarch64_cortex-a53-openwrt-24.10/*.ipk mosdns_aarch64_cortex-a53/
+          cp x86_64-openwrt-24.10/packages_ci/*.ipk mosdns_x86_64/
+          cp aarch64_cortex-a53-openwrt-24.10/packages_ci/*.ipk mosdns_aarch64_cortex-a53/
           # 保存当前路径并进入目标目录
           pushd "mosdns_x86_64" >/dev/null || exit 1
           for file in *~*.ipk; do
