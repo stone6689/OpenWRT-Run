@@ -33,10 +33,10 @@ jobs:
 
       - name: Download latest mosdns files
         run: |
-          echo "Downloading MosDNS IPK files...version=${env.LATEST_TAG}"
+          echo "Downloading MosDNS IPK files...version=$LATEST_TAG"
 
           # 获取下载链接
-          curl -sk --connect-timeout 10 "https://api.github.com/repos/sbwml/luci-app-mosdns/releases" | grep "browser_download_url" | grep "${env.LATEST_TAG}" > releases.txt
+          curl -sk --connect-timeout 10 "https://api.github.com/repos/sbwml/luci-app-mosdns/releases" | grep "browser_download_url" | grep "$LATEST_TAG" > releases.txt
 
           if [ $? -ne 0 ]; then
             echo "Failed to get version information, please check the network status."
