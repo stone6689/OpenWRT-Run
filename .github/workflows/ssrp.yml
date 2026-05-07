@@ -30,7 +30,7 @@ jobs:
           mkdir -p x86_64/depends a53/depends
           package_version="${{ github.event.inputs.package_version }}"
           if [ -z "$package_version" ]; then
-            package_version="packages-24.10"
+            package_version="packages-25.12"
           fi
           echo "PACKAGE_VERSION=$package_version" >> $GITHUB_ENV
           wget -O x86_64/depends/libopenssl3.ipk https://github.com/wkccd/build/releases/download/pw1/libopenssl3_3.0.16-1_x86_64.ipk
