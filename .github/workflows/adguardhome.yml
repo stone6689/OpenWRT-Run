@@ -30,7 +30,7 @@ jobs:
         run: |
           package_version="${{ github.event.inputs.package_version }}"
           if [ -z "$package_version" ]; then
-            package_version="packages-24.10"
+            package_version="packages-25.12"
           fi
           echo "PACKAGE_VERSION=$package_version" >> $GITHUB_ENV
       
