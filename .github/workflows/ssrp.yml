@@ -39,7 +39,7 @@ jobs:
         run: |
           echo "Get PACKAGE_VERSION=$PACKAGE_VERSION"
           
-          FILE_PREFIXES=("shadowsocks-libev-ss-server" "dns2tcp" "lua-neturl" "chinadns-ng" "dns2socks" "hysteria" "ipt2socks" "microsocks" "mosdns" "naiveproxy" "redsocks2" "shadowsocksr-libev" "shadowsocks-rust" "shadow-tls" "simple-obfs-client" "tcping" "trojan" "tuic-client" "v2ray-plugin" "xray-core" "luci-app-ssr-plus")
+          FILE_PREFIXES=("shadowsocks-libev-ss-server" "dns2tcp" "lua-neturl" "chinadns-ng" "dns2socks" "hysteria" "ipt2socks" "microsocks" "mosdns" "naiveproxy" "redsocks2" "shadowsocksr-libev" "shadowsocks-rust" "shadow-tls" "simple-obfs-client" "tcping" "trojan" "tuic-client" "v2ray-plugin" "xray-core")
           EXCLUDE_PREFIXES=("luci-app-chinadns-ng" "luci-app-microsocks" "luci-app-mosdns" "luci-app-naiveproxy" "luci-app-redsocks2" "luci-app-shadowsocks")
           
           BASE_URL_X86="https://dl.openwrt.ai/$PACKAGE_VERSION/x86_64/kiddin9/"
@@ -184,6 +184,46 @@ jobs:
           ls a53/
           echo "查看x86_64目录"
           ls x86_64/
+
+      - name: Download SSR Plus IPKs by ARCH
+        run: |
+          download_for_arch () {
+            ARCH="$1"          # x86_64 或 aarch64_generic
+            SAVE_DIR="$2"      # x86_64 或 a53
+
+            BASE_URL="https://opkg.cooluc.com/openwrt-24.10/${ARCH}/"
+
+            echo "📦 Source: $BASE_URL"
+            echo "📁 Save to: $SAVE_DIR"
+
+            fetch_and_download() {
+              KEYWORD="$1"
+
+              IPK_FILE=$(curl -fsSL "$BASE_URL" \
+                | grep -oE "${KEYWORD}[^\"']+\.ipk" \
+                | sort -V | tail -n1)
+
+              if [ -z "$IPK_FILE" ]; then
+                echo "❌ Cannot find $KEYWORD for $ARCH"
+                exit 1
+              fi
+
+              FULL_URL="${BASE_URL}${IPK_FILE}"
+              SAFE_NAME=$(echo "$IPK_FILE" | tr '~' '-')
+
+              echo "⬇️ $SAFE_NAME"
+              wget -q --show-progress -O "${SAVE_DIR}/${SAFE_NAME}" "$FULL_URL"
+            }
+
+            fetch_and_download "luci-app-ssr-plus"
+            fetch_and_download "luci-i18n-ssr-plus-zh-cn"
+
+            echo "✅ Done for $ARCH"
+            echo
+          }
+          
+          download_for_arch "x86_64" "x86_64"
+          download_for_arch "aarch64_generic" "a53"
 
       - name: Parse version from filename
         id: setver
