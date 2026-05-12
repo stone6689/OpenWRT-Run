@@ -53,8 +53,8 @@ wget -qO imm.sh https://cafe.cpolar.top/wkdaily/zero3/raw/branch/main/zero3/imm.
 <summary><h2>🍭鸣谢和引用的项目 👇🏿</h2></summary>
   
 > 【打包】https://github.com/megastep/makeself
-> > 【引用】https://github.com/xiaorouji/openwrt-passwall<br>
-> > 【引用】https://github.com/xiaorouji/openwrt-passwall2<br>
+> > 【引用】https://github.com/Openwrt-Passwall/openwrt-passwall<br>
+> > 【引用】https://github.com/Openwrt-Passwall/openwrt-passwall2<br>
 > > 【引用】https://github.com/vernesong/OpenClash<br>
 > > 【引用】https://dl.openwrt.ai<br>
 > > 【引用】https://github.com/morytyann/OpenWrt-mihomo/wiki<br>
