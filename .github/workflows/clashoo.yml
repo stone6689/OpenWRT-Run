@@ -21,7 +21,9 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
-      
+
+      - name: Clone makeself repository
+        run: git clone https://github.com/megastep/makeself.git
 
       - name: Fetch latest prerelease info
         id: fetch_release
