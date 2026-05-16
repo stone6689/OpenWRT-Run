@@ -39,12 +39,12 @@ jobs:
           mkdir -p x86 x86-pre arm64 arm64-pre
 
           # 下载xray-core x86
-          wget -Oq x86-pre/Xray-linux-64.zip https://github.com/XTLS/Xray-core/releases/download/${LATEST_TAG}/Xray-linux-64.zip
+          wget -O x86-pre/Xray-linux-64.zip https://github.com/XTLS/Xray-core/releases/download/${LATEST_TAG}/Xray-linux-64.zip
           unzip -o -q x86-pre/Xray-linux-64.zip -d x86-pre
           cp -f x86-pre/xray x86/xray
           
           # 下载xray-core arm64
-          wget -Oq arm64-pre/Xray-linux-arm64-v8a.zip  https://github.com/XTLS/Xray-core/releases/download/${LATEST_TAG}/Xray-linux-arm64-v8a.zip
+          wget -O arm64-pre/Xray-linux-arm64-v8a.zip  https://github.com/XTLS/Xray-core/releases/download/${LATEST_TAG}/Xray-linux-arm64-v8a.zip
           unzip -o -q arm64-pre/Xray-linux-arm64-v8a.zip -d arm64-pre
           cp -f arm64-pre/xray arm64/xray
 
