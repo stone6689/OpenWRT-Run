@@ -26,9 +26,9 @@ jobs:
       - name: Fetch latest prerelease info
         id: fetch_release
         run: |
-          release_json=$(curl -s https://api.github.com/repos/kenzok8/openwrt-clashoo/releases \
-            | jq 'sort_by(.published_at) | reverse | map(select(.prerelease==true)) | .[0]')
-          echo "$release_json" > release.json
+          curl -s https://api.github.com/repos/kenzok8/openwrt-clashoo/releases \
+            | jq 'map(select(.prerelease==false)) | sort_by(.published_at) | last' \
+            > release.json
 
       - name: Parse asset download URLs
         id: parse_assets
