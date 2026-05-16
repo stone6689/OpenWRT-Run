@@ -61,6 +61,7 @@ jobs:
           opkg install xray-core
           chmod +x xray
           cp xray /usr/bin/xray
+          echo "Xray core has been updated to ${LATEST_TAG}"
           EOF
           chmod +x x86/install.sh
           cp x86/install.sh arm64/install.sh
