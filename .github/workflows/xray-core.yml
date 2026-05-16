@@ -39,12 +39,12 @@ jobs:
           mkdir -p x86 x86-pre arm64 arm64-pre
 
           # 下载xray-core x86
-          wget -O x86-pre/Xray-linux-64.zip https://github.com/XTLS/Xray-core/releases/download/${env.LATEST_TAG}/Xray-linux-64.zip
+          wget -O x86-pre/Xray-linux-64.zip https://github.com/XTLS/Xray-core/releases/download/${LATEST_TAG}/Xray-linux-64.zip
           unzip x86-pre/Xray-linux-64.zip
           cp x86-pre/xray x86/xray
           
           # 下载xray-core arm64
-          wget -O arm64-pre/Xray-linux-arm64-v8a.zip  https://github.com/XTLS/Xray-core/releases/download/${env.LATEST_TAG}/Xray-linux-arm64-v8a.zip
+          wget -O arm64-pre/Xray-linux-arm64-v8a.zip  https://github.com/XTLS/Xray-core/releases/download/${LATEST_TAG}/Xray-linux-arm64-v8a.zip
           unzip arm64-pre/Xray-linux-arm64-v8a.zip
           cp arm64-pre/xray arm64/xray 
 
@@ -73,8 +73,8 @@ jobs:
       - name: Create self-extracting packages
         run: |
           cd makeself
-          ./makeself.sh x86/ xray-core_${env.LATEST_TAG}_x86_64.run "by github action" ./install.sh
-          ./makeself.sh arm64/ xray-core_${env.LATEST_TAG}_aarch64_a53.run "by github action" ./install.sh
+          ./makeself.sh x86/ xray-core_${LATEST_TAG}_x86_64.run "by github action" ./install.sh
+          ./makeself.sh arm64/ xray-core_${LATEST_TAG}_aarch64_a53.run "by github action" ./install.sh
 
       - name: Check file sizes
         run: |
