@@ -45,7 +45,7 @@ jobs:
           # =========================
           X86_URL=$(jq -r '
             [.assets[]
-             | select(.name | test("quickfile-.*-x86_64\\.apk"))
+             | select(.name | test("quickfile-1.*-x86_64\\.apk"))
              | .browser_download_url][0]
           ' release.json)
 
@@ -66,7 +66,7 @@ jobs:
           # =========================
           ARM_URL=$(jq -r '
             [.assets[]
-             | select(.name | test("quickfile-.*-aarch64_cortex-a53\\.apk"))
+             | select(.name | test("quickfile-1.*-aarch64_cortex-a53\\.apk"))
              | .browser_download_url][0]
           ' release.json)
 
