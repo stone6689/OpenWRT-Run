@@ -113,7 +113,7 @@ jobs:
 
           # 从 x86 的 quickfile 文件名提取日期版本号
           file=$(basename "$X86_URL")
-          version="${file#*_}"
+          version="${file#*-}"
           version="${version%%-*}"
 
           echo "VERSION=$version" >> $GITHUB_ENV
