@@ -31,39 +31,78 @@ jobs:
           curl -s https://api.github.com/repos/wkccd/quickfile/releases \
             | jq 'map(select(.prerelease==false)) | sort_by(.published_at) | last' \
             > release.json
-
+      
       - name: Parse asset download URLs
         id: parse_assets
+        shell: bash
         run: |
-          X86_URL=$(jq -r '.assets[] 
-            | select(.name | test("quickfile-.*-x86_64.apk")) 
-            | .browser_download_url' release.json)
-          LUCI_MAIN_X86_URL=$(jq -r '.assets[] 
-            | select(.name | test("luci-app-quickfile-.*-x86_64.apk")) 
-            | .browser_download_url' release.json)
-          LUCI_I18N_X86_URL=$(jq -r '.assets[] 
-            | select(.name | test("luci-i18n-quickfile-zh-cn-.*-x86_64.apk")) 
-            | .browser_download_url' release.json)
-          
-          ARM_URL=$(jq -r '.assets[] 
-            | select(.name | test("quickfile-.*-aarch64_cortex-a53.apk")) 
-            | .browser_download_url' release.json)
-          LUCI_MAIN_ARM_URL=$(jq -r '.assets[] 
-            | select(.name | test("luci-app-quickfile-.*-aarch64_cortex-a53.apk")) 
-            | .browser_download_url' release.json)
-          LUCI_I18N_ARM_URL=$(jq -r '.assets[] 
-            | select(.name | test("luci-i18n-quickfile-zh-cn-.*-aarch64_cortex-a53.apk")) 
-            | .browser_download_url' release.json)
+          set -e
 
-          echo "X86_URL=$X86_URL" >> $GITHUB_ENV
-          echo "LUCI_MAIN_X86_URL=$LUCI_MAIN_X86_URL" >> $GITHUB_ENV
-          echo "LUCI_I18N_X86_URL=$LUCI_I18N_X86_URL" >> $GITHUB_ENV
+          echo "Parsing release assets..."
 
-          echo "ARM_URL=$ARM_URL" >> $GITHUB_ENV
-          echo "LUCI_MAIN_ARM_URL=$LUCI_MAIN_ARM_URL" >> $GITHUB_ENV
-          echo "LUCI_I18N_ARM_URL=$LUCI_I18N_ARM_URL" >> $GITHUB_ENV
-          
+          # =========================
+          # X86
+          # =========================
+          X86_URL=$(jq -r '
+            [.assets[]
+             | select(.name | test("quickfile-.*-x86_64\\.apk"))
+             | .browser_download_url][0]
+          ' release.json)
 
+          LUCI_MAIN_X86_URL=$(jq -r '
+            [.assets[]
+             | select(.name | test("luci-app-quickfile-.*-x86_64\\.apk"))
+             | .browser_download_url][0]
+          ' release.json)
+
+          LUCI_I18N_X86_URL=$(jq -r '
+            [.assets[]
+             | select(.name | test("luci-i18n-quickfile-zh-cn-.*-x86_64\\.apk"))
+             | .browser_download_url][0]
+          ' release.json)
+
+          # =========================
+          # ARM
+          # =========================
+          ARM_URL=$(jq -r '
+            [.assets[]
+             | select(.name | test("quickfile-.*-aarch64_cortex-a53\\.apk"))
+             | .browser_download_url][0]
+          ' release.json)
+
+          LUCI_MAIN_ARM_URL=$(jq -r '
+            [.assets[]
+             | select(.name | test("luci-app-quickfile-.*-aarch64_cortex-a53\\.apk"))
+             | .browser_download_url][0]
+          ' release.json)
+
+          LUCI_I18N_ARM_URL=$(jq -r '
+            [.assets[]
+             | select(.name | test("luci-i18n-quickfile-zh-cn-.*-aarch64_cortex-a53\\.apk"))
+             | .browser_download_url][0]
+          ' release.json)
+
+          # =========================
+          # DEBUG（建议保留）
+          # =========================
+          echo "DEBUG X86_URL=$X86_URL"
+          echo "DEBUG LUCI_MAIN_X86_URL=$LUCI_MAIN_X86_URL"
+          echo "DEBUG LUCI_I18N_X86_URL=$LUCI_I18N_X86_URL"
+          echo "DEBUG ARM_URL=$ARM_URL"
+          echo "DEBUG LUCI_MAIN_ARM_URL=$LUCI_MAIN_ARM_URL"
+          echo "DEBUG LUCI_I18N_ARM_URL=$LUCI_I18N_ARM_URL"
+
+          # =========================
+          # 写入 GITHUB_ENV（安全版）
+          # =========================
+          [ -n "$X86_URL" ] && echo "X86_URL=$X86_URL" >> $GITHUB_ENV
+          [ -n "$LUCI_MAIN_X86_URL" ] && echo "LUCI_MAIN_X86_URL=$LUCI_MAIN_X86_URL" >> $GITHUB_ENV
+          [ -n "$LUCI_I18N_X86_URL" ] && echo "LUCI_I18N_X86_URL=$LUCI_I18N_X86_URL" >> $GITHUB_ENV
+
+          [ -n "$ARM_URL" ] && echo "ARM_URL=$ARM_URL" >> $GITHUB_ENV
+          [ -n "$LUCI_MAIN_ARM_URL" ] && echo "LUCI_MAIN_ARM_URL=$LUCI_MAIN_ARM_URL" >> $GITHUB_ENV
+          [ -n "$LUCI_I18N_ARM_URL" ] && echo "LUCI_I18N_ARM_URL=$LUCI_I18N_ARM_URL" >> $GITHUB_ENV
+      
       - name: Download apk files
         run: |
           mkdir -p x86 arm64
