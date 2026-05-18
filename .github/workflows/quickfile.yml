@@ -59,14 +59,14 @@ jobs:
       - name: Download ipk files
         run: |
           mkdir -p x86 arm64
-          wget -q "$X86_URL" -P x86/
-          wget -q "$ARM_URL" -P arm64/
+          wget "$X86_URL" -P x86/
+          wget "$ARM_URL" -P arm64/
           
-          wget -q "$LUCI_MAIN_URL" -P x86/
-          wget -q "$LUCI_MAIN_URL" -P arm64/
+          wget "$LUCI_MAIN_URL" -P x86/
+          wget "$LUCI_MAIN_URL" -P arm64/
           
-          wget -q "$LUCI_I18N_URL" -P x86/
-          wget -q "$LUCI_I18N_URL" -P arm64/
+          wget "$LUCI_I18N_URL" -P x86/
+          wget "$LUCI_I18N_URL" -P arm64/
 
           # 从 x86 的 quickfile 文件名提取日期版本号
           fname=$(basename "$X86_URL")
