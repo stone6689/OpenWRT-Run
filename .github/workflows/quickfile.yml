@@ -69,9 +69,11 @@ jobs:
           wget "$LUCI_I18N_URL" -P arm64/
 
           # 从 x86 的 quickfile 文件名提取日期版本号
-          fname=$(basename "$X86_URL")
-          VERSION=$(echo "$fname" | grep -oP '\d{4}\.\d{2}\.\d{2}')
-          echo "VERSION=$VERSION" >> $GITHUB_ENV
+          file=$(basename "$X86_URL")
+          version="${file#*_}"
+          version="${version%%-*}"
+
+          echo "VERSION=$version" >> $GITHUB_ENV
           echo "提取到版本号: $VERSION"
 
       - name: Create install.sh scripts
