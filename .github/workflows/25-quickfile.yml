@@ -36,37 +36,44 @@ jobs:
         id: parse_assets
         run: |
           X86_URL=$(jq -r '.assets[] 
-            | select(.name | test("quickfile_.*_x86_64.apk")) 
+            | select(.name | test("quickfile-.*-x86_64.apk")) 
             | .browser_download_url' release.json)
-
+          LUCI_MAIN_X86_URL=$(jq -r '.assets[] 
+            | select(.name | test("luci-app-quickfile-.*-x86_64.apk")) 
+            | .browser_download_url' release.json)
+          LUCI_I18N_X86_URL=$(jq -r '.assets[] 
+            | select(.name | test("luci-i18n-quickfile-zh-cn-.*-x86_64.apk")) 
+            | .browser_download_url' release.json)
+          
           ARM_URL=$(jq -r '.assets[] 
-            | select(.name | test("quickfile_.*_aarch64_cortex-a53.apk")) 
+            | select(.name | test("quickfile-.*-aarch64_cortex-a53.apk")) 
             | .browser_download_url' release.json)
-
-          LUCI_MAIN_URL=$(jq -r '.assets[] 
-            | select(.name | test("luci-app-quickfile_.*all.apk")) 
+          LUCI_MAIN_ARM_URL=$(jq -r '.assets[] 
+            | select(.name | test("luci-app-quickfile-.*-aarch64_cortex-a53.apk")) 
             | .browser_download_url' release.json)
-
-          LUCI_I18N_URL=$(jq -r '.assets[] 
-            | select(.name | test("luci-i18n-quickfile-zh-cn_.*all.apk")) 
+          LUCI_I18N_ARM_URL=$(jq -r '.assets[] 
+            | select(.name | test("luci-i18n-quickfile-zh-cn-.*-aarch64_cortex-a53.apk")) 
             | .browser_download_url' release.json)
 
           echo "X86_URL=$X86_URL" >> $GITHUB_ENV
+          echo "LUCI_MAIN_X86_URL=$LUCI_MAIN_X86_URL" >> $GITHUB_ENV
+          echo "LUCI_I18N_X86_URL=$LUCI_I18N_X86_URL" >> $GITHUB_ENV
+
           echo "ARM_URL=$ARM_URL" >> $GITHUB_ENV
-          echo "LUCI_MAIN_URL=$LUCI_MAIN_URL" >> $GITHUB_ENV
-          echo "LUCI_I18N_URL=$LUCI_I18N_URL" >> $GITHUB_ENV
+          echo "LUCI_MAIN_ARM_URL=$LUCI_MAIN_ARM_URL" >> $GITHUB_ENV
+          echo "LUCI_I18N_ARM_URL=$LUCI_I18N_ARM_URL" >> $GITHUB_ENV
+          
 
       - name: Download apk files
         run: |
           mkdir -p x86 arm64
           wget "$X86_URL" -P x86/
+          wget "$LUCI_MAIN_X86_URL" -P x86/
+          wget "$LUCI_I18N_X86_URL" -P x86/
+          
           wget "$ARM_URL" -P arm64/
-          
-          wget "$LUCI_MAIN_URL" -P x86/
-          wget "$LUCI_MAIN_URL" -P arm64/
-          
-          wget "$LUCI_I18N_URL" -P x86/
-          wget "$LUCI_I18N_URL" -P arm64/
+          wget "$LUCI_MAIN_ARM_URL" -P arm64/
+          wget "$LUCI_I18N_ARM_URL" -P arm64/
 
           # 从 x86 的 quickfile 文件名提取日期版本号
           file=$(basename "$X86_URL")
@@ -85,9 +92,7 @@ jobs:
               echo "update failed。"
               exit 1
           fi
-          apk add --allow-untrusted quickfile_*.apk
-          apk add --allow-untrusted luci-app-quickfile_*.apk
-          apk add --allow-untrusted luci-i18n-quickfile-zh-cn_*.apk
+          apk add --allow-untrusted *.apk
           # fix nginx
           uci set nginx.global.uci_enable='true'
           uci del nginx._lan
