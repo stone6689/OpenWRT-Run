@@ -7,7 +7,7 @@
 #=================================================
 
 # 轻量好用的文件管理器(luci-app-quickfile by sbwml)
-name: Make quickfile latest Version
+name: Make 24.10 quickfile run
 
 on:
   schedule:
@@ -40,7 +40,7 @@ jobs:
             | .browser_download_url' release.json)
 
           ARM_URL=$(jq -r '.assets[] 
-            | select(.name | test("quickfile_.*_aarch64_cortex-a53.ipk")) 
+            | select(.name | test("quickfile_.*_aarch64_generic.ipk")) 
             | .browser_download_url' release.json)
 
           LUCI_MAIN_URL=$(jq -r '.assets[] 
@@ -114,8 +114,8 @@ jobs:
       - name: Create self-extracting packages
         run: |
           cd makeself
-          ./makeself.sh x86/ quickfile_${VERSION}_x86_64.run "by github action" ./install.sh
-          ./makeself.sh arm64/ quickfile_${VERSION}_aarch64_a53.run "by github action" ./install.sh
+          ./makeself.sh x86/ 24_quickfile_${VERSION}_x86_64.run "by github action" ./install.sh
+          ./makeself.sh arm64/ 24_quickfile_${VERSION}_aarch64_generic.run "by github action" ./install.sh
 
       - name: Check file sizes
         run: |
