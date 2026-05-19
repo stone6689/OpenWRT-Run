@@ -85,6 +85,7 @@ jobs:
               echo "update failed。"
               exit 1
           fi
+          opkg install bash
           opkg install quickfile_*.ipk
           opkg install luci-app-quickfile_*.ipk
           opkg install luci-i18n-quickfile-zh-cn_*.ipk
