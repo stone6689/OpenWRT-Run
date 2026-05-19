@@ -160,6 +160,7 @@ jobs:
               echo "update failed。"
               exit 1
           fi
+          apk add bash
           apk add --allow-untrusted *.apk
           # fix nginx
           uci set nginx.global.uci_enable='true'
