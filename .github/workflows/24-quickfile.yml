@@ -119,7 +119,7 @@ jobs:
 
       - name: Check file sizes
         run: |
-          ls -lh makeself/quickfile_*.run
+          ls -lh makeself/*.run
 
       - name: Preparing release name
         run: |
