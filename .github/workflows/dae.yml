@@ -53,7 +53,7 @@ jobs:
 
           # 打包两个平台
           for PLATFORM in x86_64 aarch64_generic aarch64_cortex-a53; do
-            makeself "$PLATFORM" "output/luci-app-dae-${VERSION}_${PLATFORM}.run" \
+            makeself "$PLATFORM" "output/dae-${VERSION}_${PLATFORM}.run" \
               "dae ${PLATFORM} Installer v${VERSION}" ./install.sh
           done
 
