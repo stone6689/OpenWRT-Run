@@ -43,6 +43,10 @@ jobs:
             | select(.name | test("quickfile_.*_aarch64_generic.ipk")) 
             | .browser_download_url' release.json)
 
+          A53_URL=$(jq -r '.assets[] 
+            | select(.name | test("quickfile_.*_aarch64_cortex-a53.ipk")) 
+            | .browser_download_url' release.json)
+
           LUCI_MAIN_URL=$(jq -r '.assets[] 
             | select(.name | test("luci-app-quickfile_.*all.ipk")) 
             | .browser_download_url' release.json)
@@ -52,21 +56,25 @@ jobs:
             | .browser_download_url' release.json)
 
           echo "X86_URL=$X86_URL" >> $GITHUB_ENV
+          echo "A53_URL=$A53_URL" >> $GITHUB_ENV
           echo "ARM_URL=$ARM_URL" >> $GITHUB_ENV
           echo "LUCI_MAIN_URL=$LUCI_MAIN_URL" >> $GITHUB_ENV
           echo "LUCI_I18N_URL=$LUCI_I18N_URL" >> $GITHUB_ENV
 
       - name: Download ipk files
         run: |
-          mkdir -p x86 arm64
+          mkdir -p x86 arm64 a53
           wget "$X86_URL" -P x86/
           wget "$ARM_URL" -P arm64/
+          wget "$A53_URL" -P a53/
           
           wget "$LUCI_MAIN_URL" -P x86/
           wget "$LUCI_MAIN_URL" -P arm64/
+          wget "$LUCI_MAIN_URL" -P a53/
           
           wget "$LUCI_I18N_URL" -P x86/
           wget "$LUCI_I18N_URL" -P arm64/
+          wget "$LUCI_I18N_URL" -P a53/
 
           # 从 x86 的 quickfile 文件名提取日期版本号
           file=$(basename "$X86_URL")
@@ -105,17 +113,20 @@ jobs:
           EOF
           chmod +x x86/install.sh
           cp x86/install.sh arm64/install.sh
+          cp x86/install.sh a53/install.sh
 
       - name: Move directories to makeself
         run: |
           mv x86 makeself/
           mv arm64 makeself/
+          mv a53 makeself/
 
       - name: Create self-extracting packages
         run: |
           cd makeself
           ./makeself.sh x86/ 24_quickfile_${VERSION}_x86_64.run "by github action" ./install.sh
           ./makeself.sh arm64/ 24_quickfile_${VERSION}_aarch64_generic.run "by github action" ./install.sh
+          ./makeself.sh a53/ 24_quickfile_${VERSION}_aarch64_cortex-a53.run "by github action" ./install.sh
 
       - name: Check file sizes
         run: |
