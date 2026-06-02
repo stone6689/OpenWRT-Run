@@ -34,34 +34,30 @@ jobs:
       - name: Clone makeself repository
         run: git clone https://github.com/megastep/makeself.git
 
-      - name: Download latest sing-box files
+      - name: Download latest sing-box core ipk
         run: |
-          mkdir -p x86 x86-pre arm64 arm64-pre
+          mkdir -p x86 arm64
           VERSION=${LATEST_TAG#v}
           # x86_64 
-          wget -O x86-pre/sing-box-amd64.tar.gz \
-            https://github.com/SagerNet/sing-box/releases/download/${LATEST_TAG}/sing-box-${VERSION}-linux-amd64.tar.gz
-
-          tar -xzf x86-pre/sing-box-amd64.tar.gz -C x86-pre
-
-          cp -f x86-pre/sing-box-${VERSION}-linux-amd64/sing-box x86/sing-box
-
+          wget -O x86/sing-box_${VERSION}_openwrt_x86_64.ipk \
+            https://github.com/SagerNet/sing-box/releases/download/${LATEST_TAG}/sing-box_${VERSION}_openwrt_x86_64.ipk
 
           # arm64
-          wget -O arm64-pre/sing-box-arm64.tar.gz \
-            https://github.com/SagerNet/sing-box/releases/download/${LATEST_TAG}/sing-box-${VERSION}-linux-arm64.tar.gz
+          wget -O arm64/sing-box_${VERSION}_openwrt_aarch64_generic.ipk \
+            https://github.com/SagerNet/sing-box/releases/download/${LATEST_TAG}/sing-box_${VERSION}_openwrt_aarch64_generic.ipk
 
-          tar -xzf arm64-pre/sing-box-arm64.tar.gz -C arm64-pre
-
-          cp -f arm64-pre/sing-box-${VERSION}-linux-arm64/sing-box arm64/sing-box
 
 
       - name: Create install.sh scripts
         run: |
           cat <<EOF > x86/install.sh
           #!/bin/sh
-          chmod +x sing-box
-          cp sing-box /usr/bin/sing-box
+          opkg update
+          if [ $? -ne 0 ]; then
+              echo "update failed。"
+              exit 1
+          fi
+          opkg install *.ipk
           echo "sing-box core has been updated to ${LATEST_TAG}"
           EOF
           chmod +x x86/install.sh
