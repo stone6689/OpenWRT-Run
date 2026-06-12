@@ -61,9 +61,10 @@ for platform in "${!PLATFORMS[@]}"; do
             continue
         fi
 
-        FILE="${pkg}_${VERSION}.apk"
+        FILE="${pkg}-${VERSION}.apk"
 
         echo "⬇️  ${FILE}"
+        echo "⬇️  $DOWNLOAD_URL"
 
         if curl -fsSL \
             -o "${SAVE_DIR}/${FILE}" \
