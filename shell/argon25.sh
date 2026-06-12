@@ -13,7 +13,7 @@ declare -A PLATFORMS=(
 declare -A PACKAGE_SOURCES=(
   ["luci-theme-argon"]="luci"
   ["luci-app-argon-config"]="luci"
-  ["luci-i18n-argon-config"]="luci"
+  ["luci-i18n-argon-config-zh-cn"]="luci"
 )
 
 OUT_DIR="$(pwd)"
