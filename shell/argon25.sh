@@ -1,4 +1,3 @@
-```bash
 #!/bin/bash
 
 set -euo pipefail
@@ -80,4 +79,3 @@ done
 
 echo
 echo "✅ 25.12.x Argon packages downloaded."
-```
