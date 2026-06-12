@@ -1,60 +1,76 @@
 #!/bin/bash
 
-# 平台基础URL
+set -euo pipefail
+
 declare -A PLATFORMS=(
   ["x86_64"]="https://mirrors.pku.edu.cn/immortalwrt/releases/25.12.0/packages/x86_64"
   ["aarch64_generic"]="https://mirrors.pku.edu.cn/immortalwrt/releases/25.12.0/packages/aarch64_generic"
   ["aarch64_cortex-a53"]="https://mirrors.pku.edu.cn/immortalwrt/releases/25.12.0/packages/aarch64_cortex-a53"
 )
 
-# 各类包对应的目录
 declare -A PACKAGE_SOURCES=(
   ["luci-theme-argon"]="luci"
   ["luci-app-argon-config"]="luci"
   ["luci-i18n-argon-config"]="luci"
 )
 
-OUT_DIR=$(pwd)
+OUT_DIR="$(pwd)"
 TMP_DIR="$(mktemp -d)"
 
 cleanup() {
-  rm -rf "$TMP_DIR"
+    rm -rf "$TMP_DIR"
 }
 trap cleanup EXIT
 
 for platform in "${!PLATFORMS[@]}"; do
-  BASE_URL="${PLATFORMS[$platform]}"
-  SAVE_DIR="${OUT_DIR}/${platform}"
-  mkdir -p "$SAVE_DIR"
 
-  echo "📦 正在处理平台: $platform"
+    echo
+    echo "📦 Platform: $platform"
 
-  for keyword in "${!PACKAGE_SOURCES[@]}"; do
-    subdir="${PACKAGE_SOURCES[$keyword]}"
-    URL="${BASE_URL}/${subdir}"
-    PKG_INDEX="${TMP_DIR}/${platform}_${subdir}_Packages"
+    SAVE_DIR="${OUT_DIR}/${platform}"
+    mkdir -p "$SAVE_DIR"
 
-    echo "🔍 从 Packages.gz 查找 $keyword"
+    declare -A CACHE=()
 
-    # 下载并解压 Packages.gz
-    if ! curl -fsL "${URL}/Packages.gz" | gunzip -c > "$PKG_INDEX"; then
-      echo "⚠️ 无法获取 ${URL}/Packages.gz"
-      continue
-    fi
+    for pkg in "${!PACKAGE_SOURCES[@]}"; do
 
-    # 从 Filename 字段中匹配 apk
-    FILE=$(awk -v kw="$keyword" '
-      $1=="Filename:" && $2 ~ "^"kw".*\\.apk$" {
-        print $2; exit
-      }
-    ' "$PKG_INDEX")
+        feed="${PACKAGE_SOURCES[$pkg]}"
+        URL="${PLATFORMS[$platform]}/${feed}"
 
-    if [ -n "$FILE" ]; then
-      echo "⬇️ 正在下载: $FILE"
-      curl -fsL -o "${SAVE_DIR}/${FILE##*/}" "${URL}/${FILE}"
-    else
-      echo "❌ 未找到匹配: $keyword"
-    fi
-  done
+        if [[ ! -f "${TMP_DIR}/${platform}_${feed}.html" ]]; then
+            echo "🌐 Fetching ${feed} index..."
+            if ! curl -fsSL "${URL}/" -o "${TMP_DIR}/${platform}_${feed}.html"; then
+                echo "❌ Failed: ${URL}"
+                continue
+            fi
+        fi
+
+        HTML="${TMP_DIR}/${platform}_${feed}.html"
+
+        FILE=$(
+            grep -oE "${pkg}_[^\"]+\.apk" "$HTML" \
+            | sort -V \
+            | tail -n1
+        )
+
+        if [[ -z "$FILE" ]]; then
+            echo "❌ ${pkg} not found"
+            continue
+        fi
+
+        echo "⬇️  ${FILE}"
+
+        if curl -fL \
+            -o "${SAVE_DIR}/${FILE}" \
+            "${URL}/${FILE}"; then
+            echo "   ✔ OK"
+        else
+            echo "   ❌ Download failed"
+        fi
+
+    done
+
 done
-echo "✅ 25.12.x argon 主题下载完成"
+
+echo
+echo "✅ All done."
