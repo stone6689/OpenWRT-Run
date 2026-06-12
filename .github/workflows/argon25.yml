@@ -40,8 +40,9 @@ jobs:
           mkdir -p output
 
           # 获取版本
-          ARGON_APK=$(ls aarch64_generic/luci-theme-argon-*.apk | head -n 1)
-          VERSION=$(basename "$ARGON_APK" | sed -n 's/^luci-theme-argon-\([^-]*-[^_]*\)_.*$/\1/p')
+          FILE=$(basename x86_64/luci-theme-argon-*.apk)
+          VERSION=$(echo "$FILE" | sed -E 's/^luci-theme-argon-([0-9.]+)-r.*$/\1/')
+          echo "VERSION=$VERSION" >> $GITHUB_ENV
 
           if [ -z "$VERSION" ]; then
             echo "❌ 无法提取版本号"
