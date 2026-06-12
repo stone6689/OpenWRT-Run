@@ -40,8 +40,8 @@ jobs:
           mkdir -p output
 
           # 获取版本
-          ARGON_APK=$(ls aarch64_generic/luci-theme-argon_*.apk | head -n 1)
-          VERSION=$(basename "$ARGON_APK" | sed -n 's/^luci-theme-argon_\([^-]*-[^_]*\)_.*$/\1/p')
+          ARGON_APK=$(ls aarch64_generic/luci-theme-argon-*.apk | head -n 1)
+          VERSION=$(basename "$ARGON_APK" | sed -n 's/^luci-theme-argon-\([^-]*-[^_]*\)_.*$/\1/p')
 
           if [ -z "$VERSION" ]; then
             echo "❌ 无法提取版本号"
