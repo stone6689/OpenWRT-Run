@@ -5,7 +5,7 @@
 # Author: wukongdaily
 # Blog: wkdaily.cpolar.cn
 #=================================================
-name: Make Argon Theme run files
+name: Make 25-Argon Theme run files
 
 on:
   schedule:
@@ -23,7 +23,7 @@ jobs:
       - name: 📦 安装 makeself 工具
         run: sudo apt-get update && sudo apt-get install -y makeself curl
 
-      - name: 🚀 下载argon所有ipk
+      - name: 🚀 下载argon所有apk
         run: |
           chmod +x shell/argon25.sh
           ./shell/argon25.sh
@@ -40,8 +40,8 @@ jobs:
           mkdir -p output
 
           # 获取版本
-          ARGON_IPK=$(ls aarch64_generic/luci-theme-argon_*.ipk | head -n 1)
-          VERSION=$(basename "$ARGON_IPK" | sed -n 's/^luci-theme-argon_\([^-]*-[^_]*\)_.*$/\1/p')
+          ARGON_APK=$(ls aarch64_generic/luci-theme-argon_*.apk | head -n 1)
+          VERSION=$(basename "$ARGON_APK" | sed -n 's/^luci-theme-argon_\([^-]*-[^_]*\)_.*$/\1/p')
 
           if [ -z "$VERSION" ]; then
             echo "❌ 无法提取版本号"
