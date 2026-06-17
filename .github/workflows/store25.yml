@@ -39,8 +39,10 @@ jobs:
           mkdir -p output
 
           # 获取 luci-app-store 的 apk 文件
-          STORE_APK=$(ls store/luci-app-store_*.apk | head -n 1)
-          VERSION=$(basename "$STORE_APK" | sed -n 's/^luci-app-store_\([^-]*-[^_]*\)_.*$/\1/p')
+          STORE_APK=$(find store -maxdepth 1 -name 'luci-app-store-*.apk' | head -n1)
+          FILE=$(basename "$STORE_APK")
+          VERSION=${FILE#luci-app-store-}
+          VERSION=${VERSION%.apk}
 
           if [ -z "$VERSION" ]; then
             echo "❌ 无法提取版本号"
