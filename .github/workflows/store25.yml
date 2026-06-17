@@ -25,8 +25,8 @@ jobs:
 
       - name: 🚀 下载 luci-app-store 的所有 apk
         run: |
-          chmod +x shell/store.sh
-          ./shell/store.sh
+          chmod +x shell/store25.sh
+          ./shell/store25.sh
 
       - name: 📋 拷贝 install25.sh 到 store 文件夹
         run: |
