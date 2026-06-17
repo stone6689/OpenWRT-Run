@@ -2,7 +2,7 @@
 
 set -e
 
-BASE_URL="https://istore.istoreos.com/repo-apk/"
+BASE_URL="https://istore.istoreos.com/repo-apk/all/store/"
 TARGET_DIR="store"
 mkdir -p "$TARGET_DIR"
 
