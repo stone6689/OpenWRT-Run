@@ -7,29 +7,16 @@ TARGET_DIR="store"
 
 mkdir -p "$TARGET_DIR"
 
-# 指定要下载的包名前缀
-packages=(
-    "luci-app-store"
-    "luci-lib-taskd"
-    "luci-lib-xterm"
-    "taskd"
-)
+echo "[+] Fetching .apk list..."
 
-echo "[+] Fetching index page..."
-page_content=$(curl -fsSL "$BASE_URL")
+wget -qO- "$BASE_URL" \
+| grep -oE 'href="[^"]+\.apk"' \
+| cut -d'"' -f2 \
+| while read -r apk; do
+    [ -z "$apk" ] && continue
 
-echo "[+] Parsing .apk links..."
-all_apks=$(echo "$page_content" | grep -oE 'href="[^"]+\.apk"' | cut -d'"' -f2)
-
-for prefix in "${packages[@]}"; do
-    match=$(echo "$all_apks" | grep "^${prefix}_" | head -n1)
-
-    if [ -n "$match" ]; then
-        echo "[+] Downloading $match ..."
-        curl -fL -o "$TARGET_DIR/$match" "${BASE_URL}${match}"
-    else
-        echo "[!] Warning: No .apk found for $prefix"
-    fi
+    echo "[+] Downloading $apk ..."
+    wget -q -O "$TARGET_DIR/$apk" "${BASE_URL}${apk}"
 done
 
 echo "[✓] Done. Saved in: $TARGET_DIR"
