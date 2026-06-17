@@ -50,7 +50,7 @@ jobs:
           echo "version=$VERSION" >> $GITHUB_OUTPUT
 
           # 打包成 .run
-          makeself store "output/luci-app-store-${VERSION}_all.run" \
+          makeself store "output/25-luci-app-store-${VERSION}_all.run" \
             "iStore Installer v${VERSION}" ./install25.sh
 
       - name: Set tag name
