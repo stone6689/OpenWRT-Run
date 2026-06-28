@@ -22,7 +22,7 @@ jobs:
         run: mkdir -p OpenClash openclash-x86 openclash-a53
         
       - name: Checkout package branch to OpenClash directory
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
         with:
           repository: vernesong/OpenClash
           path: OpenClash
@@ -43,7 +43,7 @@ jobs:
         run: mkdir Meta
       
       - name: Checkout core branch to Meta directory
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
         with:
           repository: vernesong/OpenClash
           path: Meta
@@ -104,7 +104,7 @@ jobs:
           echo "tag_name=$TODAY" >> $GITHUB_ENV
 
       - name: Upload run files as release assets
-        uses: softprops/action-gh-release@v2.1.0
+        uses: softprops/action-gh-release@v3
         with:
           tag_name: ${{ env.tag_name }}
           name: "Daily Build - ${{ env.tag_name }}"
