@@ -7,7 +7,7 @@
 #=================================================
 
 
-name: Make 24.10.x openwrt-daede Run
+name: Make 24.10 openwrt-daede Run
 
 on:
   schedule:
@@ -35,52 +35,39 @@ jobs:
       - name: Parse asset download URLs
         id: parse_assets
         run: |
-          X86_DAED_URL=$(jq -r '.assets[] 
-            | select(.name | test("daed_.*_x86_64.ipk")) 
-            | .browser_download_url' release.json)
-          X86_DAE_URL=$(jq -r '.assets[] 
-            | select(.name | test("dae_.*_x86_64.ipk")) 
-            | .browser_download_url' release.json)
+          # x86_64
+          X86_DAED_URL=$(jq -r '.assets[] | select(.name | test("daed_.*_x86_64\\.ipk$")) | .browser_download_url' release.json)
+          X86_DAE_URL=$(jq -r '.assets[] | select(.name | test("dae_.*_x86_64\\.ipk$")) | .browser_download_url' release.json)
+
+          # aarch64_cortex-a53
+          ARM_A53_DAED_URL=$(jq -r '.assets[] | select(.name | test("daed_.*_aarch64_cortex-a53\\.ipk$")) | .browser_download_url' release.json)
+          ARM_A53_DAE_URL=$(jq -r '.assets[] | select(.name | test("dae_.*_aarch64_cortex-a53\\.ipk$")) | .browser_download_url' release.json)
+
+          # aarch64_generic
+          ARM_GENERIC_DAED_URL=$(jq -r '.assets[] | select(.name | test("daed_.*_aarch64_generic\\.ipk$")) | .browser_download_url' release.json)
+          ARM_GENERIC_DAE_URL=$(jq -r '.assets[] | select(.name | test("dae_.*_aarch64_generic\\.ipk$")) | .browser_download_url' release.json)
+
+          # luci
+          LUCI_MAIN_URL=$(jq -r '.assets[] | select(.name | test("luci-app-daede.*\\.ipk$")) | .browser_download_url' release.json)
+
+          # vmlinux-btf 固定链接保持不变
           X86_VMLINUX_BTF_URL="https://github.com/kenzok8/vmlinux-btf/releases/download/latest/vmlinux-btf_6.6.141-r1_x86_64.ipk"
-
-          ARM_A53_DAED_URL=$(jq -r '.assets[] 
-            | select(.name | test("daed_.*_aarch64_cortex-a53.ipk")) 
-            | .browser_download_url' release.json)
-          ARM_A53_DAE_URL=$(jq -r '.assets[] 
-            | select(.name | test("dae_.*_aarch64_cortex-a53.ipk")) 
-            | .browser_download_url' release.json)
           ARM_A53_VMLINUX_BTF_URL="https://github.com/kenzok8/vmlinux-btf/releases/download/latest/vmlinux-btf_6.6.141-r1_aarch64_cortex-a53.ipk"
-
-          ARM_GENERIC_DAED_URL=$(jq -r '.assets[] 
-            | select(.name | test("daed_.*_aarch64_generic.ipk")) 
-            | .browser_download_url' release.json)
-          ARM_GENERIC_DAE_URL=$(jq -r '.assets[] 
-            | select(.name | test("dae_.*_aarch64_generic.ipk")) 
-            | .browser_download_url' release.json)
           ARM_GENERIC_VMLINUX_BTF_URL="https://github.com/kenzok8/vmlinux-btf/releases/download/latest/vmlinux-btf_6.6.141-r1_aarch64_generic.ipk"
 
-
-          LUCI_MAIN_URL=$(jq -r '.assets[] 
-            | select(.name | test("luci-app-daede*.ipk")) 
-            | .browser_download_url' release.json)
-
-    
-
-          echo "X86_DAED_URL=$X86_DAED_URL" >> $GITHUB_ENV
-          echo "X86_DAE_URL=$X86_DAE_URL" >> $GITHUB_ENV
-          echo "X86_VMLINUX_BTF_URL=$X86_VMLINUX_BTF_URL" >> $GITHUB_ENV
-
-          
-          echo "ARM_A53_DAED_URL=$ARM_A53_DAED_URL" >> $GITHUB_ENV
-          echo "ARM_A53_DAE_URL=$ARM_A53_DAE_URL" >> $GITHUB_ENV
-          echo "ARM_A53_VMLINUX_BTF_URL=$ARM_A53_VMLINUX_BTF_URL" >> $GITHUB_ENV
-          
-
-          echo "ARM_GENERIC_DAED_URL=$ARM_GENERIC_DAED_URL" >> $GITHUB_ENV
-          echo "ARM_GENERIC_DAE_URL=$ARM_GENERIC_DAE_URL" >> $GITHUB_ENV
-          echo "ARM_GENERIC_VMLINUX_BTF_URL=$ARM_GENERIC_VMLINUX_BTF_URL" >> $GITHUB_ENV
-          
-          echo "LUCI_MAIN_URL=$LUCI_MAIN_URL" >> $GITHUB_ENV
+          # 输出到环境变量
+          {
+            echo "X86_DAED_URL=$X86_DAED_URL"
+            echo "X86_DAE_URL=$X86_DAE_URL"
+            echo "X86_VMLINUX_BTF_URL=$X86_VMLINUX_BTF_URL"
+            echo "ARM_A53_DAED_URL=$ARM_A53_DAED_URL"
+            echo "ARM_A53_DAE_URL=$ARM_A53_DAE_URL"
+            echo "ARM_A53_VMLINUX_BTF_URL=$ARM_A53_VMLINUX_BTF_URL"
+            echo "ARM_GENERIC_DAED_URL=$ARM_GENERIC_DAED_URL"
+            echo "ARM_GENERIC_DAE_URL=$ARM_GENERIC_DAE_URL"
+            echo "ARM_GENERIC_VMLINUX_BTF_URL=$ARM_GENERIC_VMLINUX_BTF_URL"
+            echo "LUCI_MAIN_URL=$LUCI_MAIN_URL"
+          } >> $GITHUB_ENV
          
       - name: Download ipk files
         run: |
