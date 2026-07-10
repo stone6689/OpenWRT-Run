@@ -61,7 +61,7 @@ jobs:
 
 
           LUCI_MAIN_URL=$(jq -r '.assets[] 
-            | select(.name | test("luci-app-daede_.*all.ipk")) 
+            | select(.name | test("luci-app-daede*.ipk")) 
             | .browser_download_url' release.json)
 
     
