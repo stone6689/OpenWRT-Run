@@ -38,30 +38,7 @@ jobs:
         run: bash shell/parse_assets.sh
          
       - name: Download ipk files
-        run: |
-          mkdir -p all x86 arm64 arm64-a53
-         
-          wget -q "$LUCI_MAIN_URL" -P all/
-          wget -q "$X86_DAED_URL" -P x86/
-          wget -q "$X86_DAE_URL" -P x86/
-          wget -q "$X86_VMLINUX_BTF_URL" -P x86/
-          
-
-          wget -q "$ARM_GENERIC_DAED_URL" -P arm64/
-          wget -q "$ARM_GENERIC_DAE_URL" -P arm64/
-          wget -q "$ARM_GENERIC_VMLINUX_BTF_URL" -P arm64/
-          cp all/*.ipk arm64/
-
-          wget -q "$ARM_A53_DAED_URL" -P arm64-a53/
-          wget -q "$ARM_A53_DAE_URL" -P arm64-a53/
-          wget -q "$ARM_A53_VMLINUX_BTF_URL" -P arm64-a53/
-          cp all/*.ipk arm64-a53/
-
-          # 从 x86 的 luci-app-daede 文件名提取日期版本号
-          fname=$(basename "$LUCI_MAIN_URL")
-          VERSION=$(echo "$fname" | grep -oP '\d{4}\.\d{2}\.\d{2}')
-          echo "VERSION=$VERSION" >> $GITHUB_ENV
-          echo "提取到版本号: $VERSION"
+        run: bash shell/download_ipks.sh
 
       - name: Create install.sh scripts
         run: |
