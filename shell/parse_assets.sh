@@ -1,5 +1,5 @@
 #!/bin/bash
-set -e
+set -euo pipefail
 
 echo "=== Parsing release assets ==="
 
@@ -21,7 +21,7 @@ ARM_GENERIC_DAE_URL=$(jq -r '.assets[] | select(.name | test("dae_.*_aarch64_gen
 
 LUCI_MAIN_URL=$(jq -r '.assets[] | select(.name | test("^luci-app-daede.*\\.ipk$")) | .browser_download_url' release.json | head -n1)
 
-# vmlinux-btf 固定链接
+# vmlinux-btf
 X86_VMLINUX_BTF_URL="https://github.com/kenzok8/vmlinux-btf/releases/download/latest/vmlinux-btf_6.6.141-r1_x86_64.ipk"
 ARM_A53_VMLINUX_BTF_URL="https://github.com/kenzok8/vmlinux-btf/releases/download/latest/vmlinux-btf_6.6.141-r1_aarch64_cortex-a53.ipk"
 ARM_GENERIC_VMLINUX_BTF_URL="https://github.com/kenzok8/vmlinux-btf/releases/download/latest/vmlinux-btf_6.6.141-r1_aarch64_generic.ipk"
@@ -41,11 +41,14 @@ LUCI_MAIN_URL=${LUCI_MAIN_URL}
 EOF
 
 # ==================== 输出调试信息 ====================
-echo "✅ Parse completed!"
-echo "LUCI_MAIN_URL     = $LUCI_MAIN_URL"
-echo "X86_DAED_URL      = $X86_DAED_URL"
-echo "ARM_GENERIC_DAED_URL = $ARM_GENERIC_DAED_URL"
+echo "✅ Parse completed successfully!"
+echo "LUCI_MAIN_URL     = ${LUCI_MAIN_URL:-EMPTY}"
+echo "X86_DAED_URL      = ${X86_DAED_URL:-EMPTY}"
+echo "ARM_GENERIC_DAED_URL = ${ARM_GENERIC_DAED_URL:-EMPTY}"
 
-# 检查关键变量是否为空
-[ -z "$LUCI_MAIN_URL" ] && echo "⚠️  Warning: LUCI_MAIN_URL is empty"
-[ -z "$X86_DAED_URL" ] && echo "⚠️  Warning: X86_DAED_URL is empty"
+# 仅在关键变量为空时警告，但不退出
+if [ -z "$LUCI_MAIN_URL" ] || [ -z "$X86_DAED_URL" ]; then
+  echo "⚠️  Warning: Some URLs are empty, but continuing..."
+fi
+
+echo "=== Parse step finished ==="
