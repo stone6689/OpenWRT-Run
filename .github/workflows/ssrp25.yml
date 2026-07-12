@@ -35,9 +35,17 @@ jobs:
 
           cat > work/install.sh <<'EOF'
           #!/bin/sh
-          cd "$(dirname "$0")"
+          cd "$(dirname "$0")" || exit 1
           apk update
-          apk add --allow-untrusted ./*.apk
+          apk add --allow-untrusted ./*.apk || exit 1
+
+          # install mihomo core
+          if [ -f "mihomo.gz" ]; then
+              echo "Installing mihomo core..."
+              gzip -dc mihomo.gz > /usr/bin/mihomo || exit 1
+              chmod +x /usr/bin/mihomo
+          fi
+          
           EOF
           chmod +x work/install.sh
 
@@ -73,6 +81,40 @@ jobs:
           for p in "${PACKAGES[@]}"; do
             download_apk "$p"
           done
+
+      - name: Download Mihomo Core
+        shell: bash
+        run: |
+          MIHOMO_VERSION=$(curl -fsSL https://api.github.com/repos/MetaCubeX/mihomo/releases/latest \
+            | grep '"tag_name"' \
+            | cut -d '"' -f4)
+
+          echo "Latest Mihomo: ${MIHOMO_VERSION}"
+
+          case "${{ matrix.arch }}" in
+            x86_64)
+              FILE="mihomo-linux-amd64-v1-${MIHOMO_VERSION}.gz"
+              ;;
+            aarch64_generic|aarch64_cortex-a53)
+              FILE="mihomo-linux-arm64-${MIHOMO_VERSION}.gz"
+              ;;
+            *)
+              echo "Unsupported architecture: ${{ matrix.arch }}"
+              exit 1
+              ;;
+          esac
+
+          URL="https://github.com/MetaCubeX/mihomo/releases/download/${MIHOMO_VERSION}/${FILE}"
+
+          echo "Downloading:"
+          echo "$URL"
+
+          wget -q --show-progress \
+            -O work/mihomo.gz \
+            "$URL"
+
+          echo "Downloaded files:"
+          ls -lh work/
 
       - name: Build run
         run: |
