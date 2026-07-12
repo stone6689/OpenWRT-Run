@@ -18,8 +18,11 @@ ARM_A53_DAE_URL=$(jq -r '.assets[] | select(.name | test("dae-.*-aarch64_cortex-
 ARM_GENERIC_DAED_URL=$(jq -r '.assets[] | select(.name | test("daed-.*-aarch64_generic\\.apk$")) | .browser_download_url' release.json | head -n1)
 ARM_GENERIC_DAE_URL=$(jq -r '.assets[] | select(.name | test("dae-.*-aarch64_generic\\.apk$")) | .browser_download_url' release.json | head -n1)
 
+echo "cat release.json======"
+cat release.json
+LUCI_MAIN_URL="https://github.com/kenzok8/openwrt-daede/releases/download/v2026.07.09/luci-app-daede-1.14.7-r12-x86_64.apk"
+TEST_LUCI_MAIN_URL=$(jq -r '.assets[] | select(.name | test("luci-app-daede-*-x86_64\\.apk$")) | .browser_download_url' release.json | head -n1)
 
-LUCI_MAIN_URL=$(jq -r '.assets[] | select(.name | test("luci-app-daede-*-x86_64\\.apk$")) | .browser_download_url' release.json | head -n1)
 
 # 固定链接
 X86_VMLINUX_BTF_URL="https://github.com/kenzok8/vmlinux-btf/releases/download/latest/vmlinux-btf-6.12.87-r1-x86_64.apk"
