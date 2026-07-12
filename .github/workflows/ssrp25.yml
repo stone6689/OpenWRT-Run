@@ -62,6 +62,12 @@ jobs:
               exit 1
             fi
             wget -q --show-progress -P work "$BASE_URL/$file"
+
+            if [ "$pkg" = "luci-app-ssr-plus" ]; then
+                VERSION=$(echo "$file" | sed -E 's/^luci-app-ssr-plus-(.*)\.apk$/\1/')
+                echo "PACKAGE_VERSION=$VERSION" >> "$GITHUB_ENV"
+                echo "Version: $VERSION"
+            fi
           }
 
           PACKAGES=(
@@ -118,7 +124,7 @@ jobs:
 
       - name: Build run
         run: |
-          makeself --quiet work makeself/25_SSRP_${{ matrix.arch }}.run "SSRP" ./install.sh
+          makeself --quiet work makeself/25-SSRP-${{ matrix.arch }}-${{ env.PACKAGE_VERSION }}.run "SSRP" ./install.sh
 
 
       - name: Set tag name
