@@ -37,6 +37,9 @@ jobs:
           #!/bin/sh
           cd "$(dirname "$0")" || exit 1
           apk update
+          apk add kmod-nft-tproxy
+          apk add kmod-nft-socket
+          apk add xray-core
           apk add --allow-untrusted ./*.apk || exit 1
 
           # install mihomo core
