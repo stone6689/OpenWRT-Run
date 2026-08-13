@@ -1,4 +1,4 @@
-name: Build 25.12 SSRP RUN
+name: Build 25.12 SSRP
 
 permissions:
   contents: write

@@ -6,7 +6,7 @@
 # Blog: wkdaily.cpolar.cn
 #=================================================
 
-name: Make mosdns run files 25.12
+name: Build 25.12 MosDNS
 
 on:
   schedule:

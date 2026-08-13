@@ -5,7 +5,7 @@
 # Author: wukongdaily
 # Blog: wkdaily.cpolar.cn
 #=================================================
-name: Make 25-Argon Theme run files
+name: Build 25.12 Argon
 
 on:
   schedule:
@@ -18,7 +18,7 @@ jobs:
 
     steps:
       - name: 📥 Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v6
 
       - name: 📦 安装 makeself 工具
         run: sudo apt-get update && sudo apt-get install -y makeself curl
@@ -64,7 +64,7 @@ jobs:
           echo "tag_name=$TODAY" >> $GITHUB_ENV
           
       - name: Upload run files as release assets
-        uses: softprops/action-gh-release@v2.1.0
+        uses: softprops/action-gh-release@v3
         with:
           tag_name: ${{ env.tag_name }}
           name: "Daily Build - ${{ env.tag_name }}"

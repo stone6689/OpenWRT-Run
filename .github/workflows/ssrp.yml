@@ -5,7 +5,7 @@
 # Author: wukongdaily
 # Blog: wkdaily.cpolar.cn
 #=================================================
-name: Make ShadowsocksPlus+ run files
+name: Build 24.10 SSRP
 
 on:
   schedule:
@@ -23,7 +23,7 @@ jobs:
    
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@v6
 
       - name: Create directories for x86_64 and a53 and set PACKAGE_VERSION
         run: |
@@ -311,7 +311,7 @@ jobs:
           echo "tag_name=$TODAY" >> $GITHUB_ENV
           
       - name: Upload run files as release assets
-        uses: softprops/action-gh-release@v2.1.0
+        uses: softprops/action-gh-release@v3
         with:
           tag_name: ${{ env.tag_name }}
           name: "Daily Build - ${{ env.tag_name }}"

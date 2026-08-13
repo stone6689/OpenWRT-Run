@@ -6,7 +6,7 @@
 # Blog: wkdaily.cpolar.cn
 #=================================================
 
-name: Make OpenClash run files 
+name: Build 24.10 OpenClash
 
 on:
   schedule:

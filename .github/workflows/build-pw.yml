@@ -1,4 +1,4 @@
-name: Build 25.12 PassWall run
+name: Build 25.12 PassWall
 
 on:
   schedule:

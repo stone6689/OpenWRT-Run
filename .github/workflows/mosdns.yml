@@ -6,7 +6,7 @@
 # Blog: wkdaily.cpolar.cn
 #=================================================
 
-name: Make mosdns run files 24.10
+name: Build 24.10 MosDNS
 
 on:
   schedule:
@@ -19,7 +19,7 @@ jobs:
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@v6
       
       - name: Fetch latest release tag from mosdns
         id: fetch_latest_tag
@@ -108,7 +108,7 @@ jobs:
           echo "tag_name=$TODAY" >> $GITHUB_ENV
           
       - name: Upload run files as release assets
-        uses: softprops/action-gh-release@v2.1.0
+        uses: softprops/action-gh-release@v3
         with:
           tag_name: ${{ env.tag_name }}
           name: "Daily Build - ${{ env.tag_name }}"

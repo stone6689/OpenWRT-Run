@@ -5,7 +5,7 @@
 # Author: wukongdaily
 # Blog: wkdaily.cpolar.cn
 #=================================================
-name: Make 25.12 iStore run file
+name: Build 25.12 iStore
 
 on:
   schedule:

@@ -5,7 +5,7 @@
 # Author: wukongdaily
 # Blog: wkdaily.cpolar.cn
 #=================================================
-name: Make Argon Theme run files
+name: Build 24.10 Argon
 
 on:
   schedule:
