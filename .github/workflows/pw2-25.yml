@@ -20,34 +20,36 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v6
-      
+
+      - name: Clone makeself repository
+        run: git clone https://github.com/megastep/makeself.git
+
       - name: Fetch latest release tag from Passwall2
         id: fetch_latest_tag
         run: |
           latest_tag=$(curl -s https://api.github.com/repos/Openwrt-Passwall/openwrt-passwall2/releases/latest | jq -r '.tag_name')
           echo "LATEST_TAG=$latest_tag" >> $GITHUB_ENV
 
-      - name: Clone makeself repository
-        run: git clone https://github.com/megastep/makeself.git
-
       - name: Download latest Passwall2 files
         run: |
+          latest_tag=$(curl -s https://api.github.com/repos/Openwrt-Passwall/openwrt-passwall2/releases/latest | jq -r '.tag_name')
+          echo "tag name is $latest_tag"
           mkdir -p downloads
           cd downloads
 
           # 下载 x86_64 apk
           
           curl -L -o passwall_packages_apk_x86_64.zip \
-          https://github.com/Openwrt-Passwall/openwrt-passwall2/releases/download/${{ env.LATEST_TAG }}/passwall_packages_apk_x86_64.zip
+          https://github.com/Openwrt-Passwall/openwrt-passwall2/releases/download/$latest_tag/passwall_packages_apk_x86_64.zip
 
 
           # 下载 aarch64 a53 apk
           curl -L -o passwall_packages_apk_aarch64_cortex-a53.zip \
-          https://github.com/Openwrt-Passwall/openwrt-passwall2/releases/download/${{ env.LATEST_TAG }}/passwall_packages_apk_aarch64_cortex-a53.zip
+          https://github.com/Openwrt-Passwall/openwrt-passwall2/releases/download/$latest_tag/passwall_packages_apk_aarch64_cortex-a53.zip
 
           # 下载 aarch64_generic apk
           curl -L -o passwall_packages_apk_aarch64_generic.zip \
-          https://github.com/Openwrt-Passwall/openwrt-passwall2/releases/download/${{ env.LATEST_TAG }}/passwall_packages_apk_aarch64_generic.zip
+          https://github.com/Openwrt-Passwall/openwrt-passwall2/releases/download/$latest_tag/passwall_packages_apk_aarch64_generic.zip
 
           # 下载luci app apk
           curl -L -O $(
